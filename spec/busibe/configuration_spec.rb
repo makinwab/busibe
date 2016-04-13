@@ -1,8 +1,7 @@
-require 'spec_helper'
+require "spec_helper"
 
-describe Busibe::Configuration do 
-
-  after do 
+describe Busibe::Configuration do
+  after do
     Busibe::Jusibe.reset
   end
 

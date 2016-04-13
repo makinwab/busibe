@@ -1,15 +1,15 @@
 require "helper"
 
-describe Busibe::Configuration do 
-
-  after do 
+describe Busibe::Configuration do
+  after do
     Busibe::Jusibe.reset
   end
 
   Busibe::Configuration::VALID_CONFIG_KEYS.each do |key|
     describe ".#{key}" do
       it "should return the default value" do
-        Busibe::Jusibe.send(key).must_equal Busibe::Configuration.const_get("DEFAULT_#{key.upcase}")
+        Busibe::Jusibe.send(key).must_equal
+        Busibe::Configuration.const_get("DEFAULT_#{key.upcase}")
       end
     end
   end
