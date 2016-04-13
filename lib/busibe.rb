@@ -1,5 +1,6 @@
 require "busibe/version"
+require "busibe/configuration"
 
 module Busibe
-  # Your code goes here...
+  extend Configuration
 end
