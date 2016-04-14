@@ -1,3 +1,4 @@
+[![Coverage Status](https://coveralls.io/repos/github/andela-bmakinwa/busibe/badge.svg?branch=master)](https://coveralls.io/github/andela-bmakinwa/busibe?branch=master) [![Build Status](https://travis-ci.org/andela-bmakinwa/busibe.svg?branch=master)](https://travis-ci.org/andela-bmakinwa/busibe)
 # Busibe
 
 Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/busibe`. To experiment with that code, run `bin/console` for an interactive prompt.
