@@ -22,7 +22,7 @@ module Busibe
       end
     end
 
-    def sendSMS(payload = {})
+    def send_sms(payload = {})
       if payload.empty?
         raise ArgumentError.new("A payload is required in order to send an sms")
       end
@@ -31,12 +31,12 @@ module Busibe
       self
     end
 
-    def checkAvailableCredits
+    def check_available_credits
       get("/smsapi/get_credits")
       self
     end
 
-    def checkDeliveryStatus(messageID = nil)
+    def check_delivery_status(messageID = nil)
       if messageID.nil?
         raise ArgumentError.new("A message ID is required")
       end
