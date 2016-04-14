@@ -7,13 +7,12 @@ module Busibe
         @http_headers = http_headers
         super(message)
       end
-
     end # Error
 
-    class Error::ServerError        < OpenAmplify::Error; end
+    class Error::ServerError        < Busibe::Error::Error; end
     class Error::ServiceUnavailable < Error::ServerError; end
 
-    class Error::ClientError     < OpenAmplify::Error; end
+    class Error::ClientError     < Busibe::Error::Error; end
     class Error::Forbidden       < Error::ClientError; end
     class Error::BadRequest      < Error::ClientError; end
     class Error::RequestTooLarge < Error::ClientError; end

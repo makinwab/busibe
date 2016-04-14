@@ -1,11 +1,12 @@
 require "faraday"
-require "error/client_error"
-require "error/server_error"
+require "busibe/error/client_error"
+require "busibe/error/server_error"
 
 module Busibe
   module Connection
     private
-      def connection
+
+      def connection(options)
         default_options = {
           url: options.fetch(:endpoint, endpoint)
         }
@@ -15,7 +16,7 @@ module Busibe
           faraday.use Busibe::Error::ServerError
           faraday.request :url_encoded
           faraday.response :logger
-          faraday.adapter adapter #Faraday.default_adapter
+          faraday.adapter Faraday.default_adapter
         end
       end
   end
