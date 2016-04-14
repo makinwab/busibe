@@ -1,8 +1,6 @@
 require "spec_helper"
 
 describe Busibe::Configuration do
-  
-
   before :each do
     @busibe_config = Busibe::Configuration
     @busibe = Busibe::Jusibe
