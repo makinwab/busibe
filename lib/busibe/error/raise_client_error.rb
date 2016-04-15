@@ -2,7 +2,7 @@ require "faraday"
 
 module Busibe
   module Error
-    class ClientError < Faraday::Response::Middleware
+    class RaiseClientError < Faraday::Response::Middleware
       def on_complete(env)
         status  = env[:status].to_i
         body    = env[:body]

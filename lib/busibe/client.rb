@@ -1,5 +1,7 @@
+require "json"
 require "busibe/connection"
 require "busibe/request"
+
 # Provides access to the Jusibe API http://jusibe.com
 # Basic usage of the library is to call supported methods
 # via the Client class.
@@ -46,7 +48,7 @@ module Busibe
     end
 
     def get_response
-      @response
+      JSON.load @response.body
     end
 
     def self.method_missing(method_sym, *args, &block)

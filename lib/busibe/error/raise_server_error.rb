@@ -3,7 +3,7 @@ require "busibe/error/error"
 
 module Busibe
   module Error
-    class ServerError < Faraday::Response::Middleware
+    class RaiseServerError < Faraday::Response::Middleware
       def on_complete(env)
         status  = env[:status].to_i
         headers = env[:response_headers]
