@@ -139,8 +139,9 @@ describe Busibe::Client do
         }
       }
 
-      allow_any_instance_of(Busibe::Client).to receive(:response).and_return(response)
-      
+      allow_any_instance_of(Busibe::Client).to receive(:response).
+        and_return(response)
+
       @config = {
         public_key: "60f541c01bff2ff55bf8ce7643009683",
         access_token: "45c3c5877d88c2aad5263bae924ddada"
