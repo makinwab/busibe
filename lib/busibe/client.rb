@@ -15,6 +15,7 @@ module Busibe
     include Busibe::Request
 
     attr_accessor(*Configuration::VALID_CONFIG_KEYS)
+    attr_reader :response
 
     def initialize(options = {})
       merged_options = Busibe::Jusibe.options.merge(options)
@@ -38,12 +39,12 @@ module Busibe
       self
     end
 
-    def check_delivery_status(messageID = nil)
-      if messageID.nil?
+    def check_delivery_status(message_id = nil)
+      if message_id.nil?
         raise ArgumentError.new("A message ID is required")
       end
 
-      post("/smsapi/delivery_status?message_id=#{messageID}")
+      post("/smsapi/delivery_status?message_id=#{message_id}")
       self
     end
 
@@ -51,7 +52,9 @@ module Busibe
       JSON.load @response.body
     end
 
-    def self.method_missing(method_sym, *args, &block)
+    private
+
+    def method_missing(method_sym, *args, &block)
       if method_sym.to_s =~ /^(.*)_with_response$/
         send($1).get_response
       else
@@ -59,7 +62,7 @@ module Busibe
       end
     end
 
-    def self.respond_to?(method_sym, include_private = false)
+    def respond_to?(method_sym, include_private = false)
       if method_sym.to_s =~ /^(.*)_with_response$/
         true
       else
