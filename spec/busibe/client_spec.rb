@@ -60,22 +60,36 @@ describe Busibe::Client, vcr: true do
   end
 
   describe ".send_sms" do
-    it "sends sms and returns self" do
-      @config = {
-        public_key: ENV["PUBLIC_KEY"],
-        access_token: ENV["ACCESS_TOKEN"]
-      }
+    context "when a payload is not given" do
+      it "raises and ArgumentError" do
+        @config = {
+          public_key: ENV["PUBLIC_KEY"],
+          access_token: ENV["ACCESS_TOKEN"]
+        }
 
-      api = Busibe::Client.new(@config)
-      payload = {
-        to: ENV["PHONE_NO"],
-        from: "Testing",
-        message: "Muahahahaha. What's bubbling niggas?" # bug with url_encode
-      }
+        api = Busibe::Client.new(@config)
+        error = "A payload is required in order to send an sms"
+        expect { api.send_sms }.to raise_error(ArgumentError, error)
+      end
+    end
+    context "when a payload is given" do
+      it "sends sms and returns self" do
+        @config = {
+          public_key: ENV["PUBLIC_KEY"],
+          access_token: ENV["ACCESS_TOKEN"]
+        }
 
-      VCR.use_cassette("send_sms", record: :new_episodes) do
-        expect(api.send_sms(payload)).to eq api
-        expect(api.get_response["status"]).to eq "Sent"
+        api = Busibe::Client.new(@config)
+        payload = {
+          to: ENV["PHONE_NO"],
+          from: "Testing",
+          message: "Muahahahaha. What's bubbling niggas?" # bug with url_encode
+        }
+
+        VCR.use_cassette("send_sms", record: :new_episodes) do
+          expect(api.send_sms(payload)).to eq api
+          expect(api.get_response["status"]).to eq "Sent"
+        end
       end
     end
   end
@@ -107,7 +121,11 @@ describe Busibe::Client, vcr: true do
         }
 
         api = Busibe::Client.new(@config)
-        expect { api.check_delivery_status }.to raise_error(ArgumentError)
+        error = "A message ID is required"
+        expect { api.check_delivery_status }.to raise_error(
+          ArgumentError,
+          error
+        )
       end
     end
 
