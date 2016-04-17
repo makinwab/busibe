@@ -1,11 +1,11 @@
 ---
 http_interactions:
 - request:
-    method: get
-    uri: https://jusibe.com/smsapi/get_credits
+    method: post
+    uri: https://jusibe.com/smsapi/send_sms
     body:
       encoding: UTF-8
-      string: ''
+      string: from=Testing&message=Muahahahaha.+What%27s+bubbling+niggas%3F&to=08063125510
     headers:
       User-Agent:
       - Faraday v0.9.2
@@ -23,18 +23,18 @@ http_interactions:
       content-type:
       - application/json
       date:
-      - Sun, 17 Apr 2016 02:30:34 GMT
+      - Sun, 17 Apr 2016 02:39:14 GMT
       server:
       - nginx
       set-cookie:
-      - AWSELB=CF47C7270E7E0FA602E751EFF42FB148D6C61D79FEC9EB985401B1EF9927BA37C8650EA8CD80AF12A236DDED0891787B85697921A87CAF5921B951EBA6F871B7CF56F8FAFF;PATH=/;MAX-AGE=900
+      - AWSELB=CF47C7270E7E0FA602E751EFF42FB148D6C61D79FE24C72716D1598092BA84F2A4D0CD05FB80AF12A236DDED0891787B85697921A87CAF5921B951EBA6F871B7CF56F8FAFF;PATH=/;MAX-AGE=900
       content-length:
-      - '76'
+      - '105'
       connection:
       - Close
     body:
       encoding: ASCII-8BIT
-      string: '{"sms_credits":"228","request_speed":0.0045030117034912}'
+      string: '{"status":"Sent","message_id":"n69dbwzdvx","sms_credits_used":1,"request_speed":0.2624568939209}'
     http_version: 
-  recorded_at: Sun, 17 Apr 2016 02:29:22 GMT
+  recorded_at: Sun, 17 Apr 2016 02:38:02 GMT
 recorded_with: VCR 3.0.1

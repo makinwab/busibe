@@ -23,19 +23,19 @@ http_interactions:
       content-type:
       - application/json
       date:
-      - Sun, 17 Apr 2016 02:30:06 GMT
+      - Sun, 17 Apr 2016 02:38:48 GMT
       server:
       - nginx
       set-cookie:
-      - AWSELB=CF47C7270E7E0FA602E751EFF42FB148D6C61D79FEC19CA2FD6B35C5F31CC3673DB183FC5683E52775EDE06319E4C99A4319262B2F067EF553842B596ABE715D7F971C2BAE;PATH=/;MAX-AGE=900
+      - AWSELB=CF47C7270E7E0FA602E751EFF42FB148D6C61D79FE68921C05410A99714E8F20686BAA3D6483E52775EDE06319E4C99A4319262B2F067EF553842B596ABE715D7F971C2BAE;PATH=/;MAX-AGE=900
       content-length:
-      - '132'
+      - '133'
       connection:
       - Close
     body:
       encoding: ASCII-8BIT
       string: '{"message_id":"z8k5y8x1e7","status":"Delivered","date_sent":"2016-04-16
-        00:02:13","date_delivered":"2016-04-16 00:02:18","request_speed":0.0053761005401611}'
+        00:02:13","date_delivered":"2016-04-16 00:02:18","request_speed":0.0053889751434326}'
     http_version: 
-  recorded_at: Sun, 17 Apr 2016 02:29:24 GMT
+  recorded_at: Sun, 17 Apr 2016 02:38:05 GMT
 recorded_with: VCR 3.0.1

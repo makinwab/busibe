@@ -23,18 +23,18 @@ http_interactions:
       content-type:
       - application/json
       date:
-      - Sun, 17 Apr 2016 02:22:13 GMT
+      - Sun, 17 Apr 2016 02:38:46 GMT
       server:
       - nginx
       set-cookie:
       - AWSELB=CF47C7270E7E0FA602E751EFF42FB148D6C61D79FEC19CA2FD6B35C5F31CC3673DB183FC5683E52775EDE06319E4C99A4319262B2F067EF553842B596ABE715D7F971C2BAE;PATH=/;MAX-AGE=900
       content-length:
-      - '75'
+      - '76'
       connection:
       - Close
     body:
       encoding: ASCII-8BIT
-      string: '{"sms_credits":"229","request_speed":0.005295991897583}'
+      string: '{"sms_credits":"228","request_speed":0.0052649974822998}'
     http_version: 
-  recorded_at: Sun, 17 Apr 2016 02:21:31 GMT
+  recorded_at: Sun, 17 Apr 2016 02:38:03 GMT
 recorded_with: VCR 3.0.1
