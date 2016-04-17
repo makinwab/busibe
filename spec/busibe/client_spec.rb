@@ -1,7 +1,7 @@
 require "spec_helper"
 require "dotenv"
 
-describe Busibe::Client do
+describe Busibe::Client, vcr: true do
   before do
     @keys = Busibe::Configuration::VALID_CONFIG_KEYS
   end
@@ -66,41 +66,50 @@ describe Busibe::Client do
         access_token: ENV["ACCESS_TOKEN"]
       }
 
-      api = Busibe::Client.new
+      api = Busibe::Client.new(@config)
       payload = {
         to: "08063125510",
         from: "Testing",
         message: "Muahahahaha. What's bubbling niggas?" # bug with url_encode
       }
 
-      client_api = double
-      allow(client_api).to receive(:send_sms).with(payload).and_return(api)
-      expect(client_api).to receive(:response)
-      client_api.response
+      VCR.use_cassette("send_sms") do
+        result = api.send_sms(payload)
+
+        expect(result).to eq api
+        expect(result.get_response["status"]).to eq "Sent"
+      end
     end
   end
 
   describe ".check_available_credits" do
     it "returns the sms credit" do
-      api = Busibe::Client.new
-      client_api = double
-      allow(client_api).to receive(:check_available_credits).and_return(api)
-      expect(client_api).to receive(:response)
-      client_api.response
+      @config = {
+        public_key: ENV["PUBLIC_KEY"],
+        access_token: ENV["ACCESS_TOKEN"]
+      }
+      api = Busibe::Client.new(@config)
+
+      VCR.use_cassette("credits") do
+        result = api.check_available_credits
+
+        expect(result).to eq api
+        expect(result.get_response).to be_kind_of Hash
+        expect(result.get_response["sms_credits"]).not_to be_empty
+      end
     end
   end
 
   describe ".check_delivery_status" do
     context "when a messageID is not given" do
       it "raises an ArgumentError" do
-        client_api = double
+        @config = {
+          public_key: ENV["PUBLIC_KEY"],
+          access_token: ENV["ACCESS_TOKEN"]
+        }
 
-        allow(client_api).to receive(:check_delivery_status).
-          and_raise(ArgumentError)
-
-        expect { client_api.check_delivery_status }.to raise_error(
-          ArgumentError
-        )
+        api = Busibe::Client.new(@config)
+        expect { api.check_delivery_status }.to raise_error(ArgumentError)
       end
     end
 
@@ -112,81 +121,53 @@ describe Busibe::Client do
         }
 
         api = Busibe::Client.new(@config)
-        message_id = "message_id"
-        client_api = double
+        message_id = ENV["MESSAGE_ID"]
 
-        allow(client_api).to receive(:check_delivery_status).
-          with(message_id).and_return(api)
-        result = client_api.check_delivery_status(message_id)
+        VCR.use_cassette("status") do
+          result = api.check_delivery_status(message_id)
 
-        expect(client_api).to receive(:response)
-        expect(result).to be_kind_of Busibe::Client
-
-        client_api.response
+          expect(result).to eq api
+          expect(result.get_response["message_id"]).to eq message_id
+          expect(result.get_response["status"]).not_to be_empty
+          expect(result.get_response["date_sent"]).not_to be_empty
+          expect(result.get_response["date_delivered"]).not_to be_empty
+          expect(result.get_response["request_speed"]).not_to be_falsey
+        end
       end
     end
   end
 
   describe ".get_response" do
     it "returns the response body" do
-      response = {
-        body: {
-          status: "Sent",
-          message_id: "xeqd6rrd26",
-          sms_credits_used: 1
-        }
-      }
-
-      allow_any_instance_of(Busibe::Client).to receive(:response).
-        and_return(response)
-
       @config = {
         public_key: ENV["PUBLIC_KEY"],
         access_token: ENV["ACCESS_TOKEN"]
       }
 
       api = Busibe::Client.new(@config)
-      client_api = double
+      VCR.use_cassette("credits") do
+        result = api.check_available_credits
 
-      allow(client_api).to receive(:check_available_credits).and_return(api)
-      allow(api).to receive(:get_response).and_return(response[:body])
-
-      expect(api).to receive(:response)
-      expect(api.get_response).to eq response[:body]
-
-      api.response
+        expect(result.get_response).to be_kind_of Hash
+        expect(result.get_response["sms_credits"]).not_to be_empty
+      end
     end
   end
 
   describe ".method_missing and .respond_to" do
     it "calls the 'check_available_credits' method and returns the response" do
-      response = {
-        body: {
-          sms_credits: "182"
-        }
-      }
-
-      allow_any_instance_of(Busibe::Client).to receive(:response).
-        and_return(response)
-
       @config = {
         public_key: ENV["PUBLIC_KEY"],
         access_token: ENV["ACCESS_TOKEN"]
       }
 
       api = Busibe::Client.new(@config)
-      client_api = double
+      VCR.use_cassette("credits") do
+        result = api.check_available_credits_with_response
 
-      allow(client_api).to receive(:check_available_credits).and_return(api)
-      allow(client_api).to receive(:get_response).and_return(response[:body])
-      allow(client_api).to receive(:method_missing).and_return(response[:body])
-      allow(client_api).to receive(:respond_to?).and_return(true)
-
-      result = client_api.check_available_credits_with_response
-
-      expect(result).to be_kind_of Hash
-      expect(result[:sms_credits]).not_to be_empty
-      expect(result[:sms_credits]).to eq "182"
+        expect(result).to be_kind_of Hash
+        expect(result["sms_credits"]).not_to be_empty
+      end
     end
   end
 end
