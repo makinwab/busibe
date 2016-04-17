@@ -11,4 +11,7 @@ VCR.configure do |c|
   c.default_cassette_options = {
     re_record_interval: 300 * 30
   }
+  c.filter_sensitive_data("message_id") do
+    ENV["MESSAGE_ID"]
+  end
 end

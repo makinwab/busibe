@@ -68,16 +68,14 @@ describe Busibe::Client, vcr: true do
 
       api = Busibe::Client.new(@config)
       payload = {
-        to: "08063125510",
+        to: ENV["PHONE_NO"],
         from: "Testing",
         message: "Muahahahaha. What's bubbling niggas?" # bug with url_encode
       }
 
-      VCR.use_cassette("send_sms") do
-        result = api.send_sms(payload)
-
-        expect(result).to eq api
-        expect(result.get_response["status"]).to eq "Sent"
+      VCR.use_cassette("send_sms", record: :new_episodes) do
+        expect(api.send_sms(payload)).to eq api
+        expect(api.get_response["status"]).to eq "Sent"
       end
     end
   end
@@ -90,7 +88,7 @@ describe Busibe::Client, vcr: true do
       }
       api = Busibe::Client.new(@config)
 
-      VCR.use_cassette("credits") do
+      VCR.use_cassette("credits", record: :new_episodes) do
         result = api.check_available_credits
 
         expect(result).to eq api
@@ -123,7 +121,7 @@ describe Busibe::Client, vcr: true do
         api = Busibe::Client.new(@config)
         message_id = ENV["MESSAGE_ID"]
 
-        VCR.use_cassette("status") do
+        VCR.use_cassette("status", record: :new_episodes) do
           result = api.check_delivery_status(message_id)
 
           expect(result).to eq api
