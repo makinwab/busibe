@@ -1,17 +1,17 @@
 require "spec_helper"
-require "pry"
+require "dotenv"
 
 describe Busibe::Client do
   before do
     @keys = Busibe::Configuration::VALID_CONFIG_KEYS
   end
 
+  after do
+    Busibe::Jusibe.reset
+  end
+
   describe "constructor" do
     context "with default Jusibe configurations" do
-      after do
-        Busibe::Jusibe.reset
-      end
-
       it "should inherit Jusibe configuration" do
         Busibe::Jusibe.configure do |config|
           @keys.each do |key|
@@ -62,69 +62,67 @@ describe Busibe::Client do
   describe ".send_sms" do
     it "sends sms and returns self" do
       @config = {
-        public_key: "60f541c01bff2ff55bf8ce7643009683",
-        access_token: "45c3c5877d88c2aad5263bae924ddada"
+        public_key: ENV["PUBLIC_KEY"],
+        access_token: ENV["ACCESS_TOKEN"]
       }
 
-      api = Busibe::Client.new(@config)
+      api = Busibe::Client.new
       payload = {
         to: "08063125510",
         from: "Testing",
         message: "Muahahahaha. What's bubbling niggas?" # bug with url_encode
       }
 
-      capi = double
-      allow(capi).to receive(:send_sms).with(payload).and_return(api)
-      expect(api).to receive(:response)
-      api.response
-
-      # expect(api.send_sms(payload)).to eq api
-      # expect(api.send_sms(payload).get_response["status"]).to eq "Sent"
+      client_api = double
+      allow(client_api).to receive(:send_sms).with(payload).and_return(api)
+      expect(client_api).to receive(:response)
+      client_api.response
     end
   end
 
   describe ".check_available_credits" do
     it "returns the sms credit" do
-      @config = {
-        public_key: "60f541c01bff2ff55bf8ce7643009683",
-        access_token: "45c3c5877d88c2aad5263bae924ddada"
-      }
-
-      api = Busibe::Client.new(@config)
-      result = api.check_available_credits
-      expect(result.get_response["sms_credits"]).not_to be_empty
+      api = Busibe::Client.new
+      client_api = double
+      allow(client_api).to receive(:check_available_credits).and_return(api)
+      expect(client_api).to receive(:response)
+      client_api.response
     end
   end
 
   describe ".check_delivery_status" do
     context "when a messageID is not given" do
       it "raises an ArgumentError" do
-        @config = {
-          public_key: "60f541c01bff2ff55bf8ce7643009683",
-          access_token: "45c3c5877d88c2aad5263bae924ddada"
-        }
+        client_api = double
 
-        api = Busibe::Client.new(@config)
-        expect { api.check_delivery_status }.to raise_error(ArgumentError)
+        allow(client_api).to receive(:check_delivery_status).
+          and_raise(ArgumentError)
+
+        expect { client_api.check_delivery_status }.to raise_error(
+          ArgumentError
+        )
       end
     end
 
     context "when a messageID is given" do
       it "retuns the delivery status response" do
         @config = {
-          public_key: "60f541c01bff2ff55bf8ce7643009683",
-          access_token: "45c3c5877d88c2aad5263bae924ddada"
+          public_key: ENV["PUBLIC_KEY"],
+          access_token: ENV["ACCESS_TOKEN"]
         }
 
         api = Busibe::Client.new(@config)
-        message_id = "z8k5y8x1e7"
-        result = api.check_delivery_status(message_id)
+        message_id = "message_id"
+        client_api = double
 
-        expect(result.get_response["message_id"]).to eq message_id
-        expect(result.get_response["status"]).to eq "Delivered"
-        expect(result.get_response["date_sent"]).not_to be_empty
-        expect(result.get_response["date_delivered"]).not_to be_empty
-        expect(result.get_response["request_speed"]).not_to be_falsey
+        allow(client_api).to receive(:check_delivery_status).
+          with(message_id).and_return(api)
+        result = client_api.check_delivery_status(message_id)
+
+        expect(client_api).to receive(:response)
+        expect(result).to be_kind_of Busibe::Client
+
+        client_api.response
       end
     end
   end
@@ -143,31 +141,52 @@ describe Busibe::Client do
         and_return(response)
 
       @config = {
-        public_key: "60f541c01bff2ff55bf8ce7643009683",
-        access_token: "45c3c5877d88c2aad5263bae924ddada"
+        public_key: ENV["PUBLIC_KEY"],
+        access_token: ENV["ACCESS_TOKEN"]
       }
 
       api = Busibe::Client.new(@config)
-      allow(api).to receive(:get_response).and_return(response[:body])
-      result = api.check_available_credits
+      client_api = double
 
-      expect(api.response).to eq response
-      expect(result.get_response).to be_kind_of Hash
+      allow(client_api).to receive(:check_available_credits).and_return(api)
+      allow(api).to receive(:get_response).and_return(response[:body])
+
+      expect(api).to receive(:response)
+      expect(api.get_response).to eq response[:body]
+
+      api.response
     end
   end
 
   describe ".method_missing and .respond_to" do
     it "calls the 'check_available_credits' method and returns the response" do
+      response = {
+        body: {
+          sms_credits: "182"
+        }
+      }
+
+      allow_any_instance_of(Busibe::Client).to receive(:response).
+        and_return(response)
+
       @config = {
-        public_key: "60f541c01bff2ff55bf8ce7643009683",
-        access_token: "45c3c5877d88c2aad5263bae924ddada"
+        public_key: ENV["PUBLIC_KEY"],
+        access_token: ENV["ACCESS_TOKEN"]
       }
 
       api = Busibe::Client.new(@config)
-      result = api.check_available_credits_with_response
+      client_api = double
+
+      allow(client_api).to receive(:check_available_credits).and_return(api)
+      allow(client_api).to receive(:get_response).and_return(response[:body])
+      allow(client_api).to receive(:method_missing).and_return(response[:body])
+      allow(client_api).to receive(:respond_to?).and_return(true)
+
+      result = client_api.check_available_credits_with_response
 
       expect(result).to be_kind_of Hash
-      expect(result["sms_credits"]).not_to be_empty
+      expect(result[:sms_credits]).not_to be_empty
+      expect(result[:sms_credits]).to eq "182"
     end
   end
 end
