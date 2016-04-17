@@ -4,6 +4,7 @@ AllCops:
     - "bin/**/*"
     - "Rakefile"
     - "busibe.gemspec"
+    - "spec/fixtures/**/*"
   UseCache: false
 Style/CollectionMethods:
   Description: Preferred collection methods.

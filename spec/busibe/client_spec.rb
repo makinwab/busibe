@@ -60,26 +60,24 @@ describe Busibe::Client, vcr: true do
   end
 
   describe ".send_sms" do
+    subject do
+      @config = {
+        public_key: ENV["PUBLIC_KEY"],
+        access_token: ENV["ACCESS_TOKEN"]
+      }
+
+      Busibe::Client.new(@config)
+    end
+
     context "when a payload is not given" do
       it "raises and ArgumentError" do
-        @config = {
-          public_key: ENV["PUBLIC_KEY"],
-          access_token: ENV["ACCESS_TOKEN"]
-        }
-
-        api = Busibe::Client.new(@config)
         error = "A payload is required in order to send an sms"
-        expect { api.send_sms }.to raise_error(ArgumentError, error)
+        expect { subject.send_sms }.to raise_error(ArgumentError, error)
       end
     end
+
     context "when a payload is given" do
       it "sends sms and returns self" do
-        @config = {
-          public_key: ENV["PUBLIC_KEY"],
-          access_token: ENV["ACCESS_TOKEN"]
-        }
-
-        api = Busibe::Client.new(@config)
         payload = {
           to: ENV["PHONE_NO"],
           from: "Testing",
@@ -87,8 +85,8 @@ describe Busibe::Client, vcr: true do
         }
 
         VCR.use_cassette("send_sms", record: :new_episodes) do
-          expect(api.send_sms(payload)).to eq api
-          expect(api.get_response["status"]).to eq "Sent"
+          expect(subject.send_sms(payload)).to eq subject
+          expect(subject.get_response["status"]).to eq "Sent"
         end
       end
     end
@@ -113,16 +111,19 @@ describe Busibe::Client, vcr: true do
   end
 
   describe ".check_delivery_status" do
+    subject do
+      @config = {
+        public_key: ENV["PUBLIC_KEY"],
+        access_token: ENV["ACCESS_TOKEN"]
+      }
+
+      Busibe::Client.new(@config)
+    end
+
     context "when a messageID is not given" do
       it "raises an ArgumentError" do
-        @config = {
-          public_key: ENV["PUBLIC_KEY"],
-          access_token: ENV["ACCESS_TOKEN"]
-        }
-
-        api = Busibe::Client.new(@config)
         error = "A message ID is required"
-        expect { api.check_delivery_status }.to raise_error(
+        expect { subject.check_delivery_status }.to raise_error(
           ArgumentError,
           error
         )
@@ -131,19 +132,11 @@ describe Busibe::Client, vcr: true do
 
     context "when a messageID is given" do
       it "retuns the delivery status response" do
-        @config = {
-          public_key: ENV["PUBLIC_KEY"],
-          access_token: ENV["ACCESS_TOKEN"]
-        }
-
-        api = Busibe::Client.new(@config)
-        message_id = ENV["MESSAGE_ID"]
-
         VCR.use_cassette("status", record: :new_episodes) do
-          result = api.check_delivery_status(message_id)
+          result = subject.check_delivery_status(ENV["MESSAGE_ID"])
 
-          expect(result).to eq api
-          expect(result.get_response["message_id"]).to eq message_id
+          expect(result).to eq subject
+          expect(result.get_response["message_id"]).to eq ENV["MESSAGE_ID"]
           expect(result.get_response["status"]).not_to be_empty
           expect(result.get_response["date_sent"]).not_to be_empty
           expect(result.get_response["date_delivered"]).not_to be_empty
@@ -170,19 +163,32 @@ describe Busibe::Client, vcr: true do
     end
   end
 
-  describe ".method_missing and .respond_to" do
-    it "calls the 'check_available_credits' method and returns the response" do
+  describe ".method_missing / .respond_to" do
+    subject do
       @config = {
         public_key: ENV["PUBLIC_KEY"],
         access_token: ENV["ACCESS_TOKEN"]
       }
 
-      api = Busibe::Client.new(@config)
-      VCR.use_cassette("credits") do
-        result = api.check_available_credits_with_response
+      Busibe::Client.new(@config)
+    end
 
-        expect(result).to be_kind_of Hash
-        expect(result["sms_credits"]).not_to be_empty
+    context "when the method does not exist" do
+      it "return error" do
+        expect { subject.invalid_method_with_response }.to raise_error(
+          NoMethodError
+        )
+      end
+    end
+
+    context "when the method exists" do
+      it "calls the method and returns the response" do
+        VCR.use_cassette("credits") do
+          result = subject.check_available_credits_with_response
+
+          expect(result).to be_kind_of Hash
+          expect(result["sms_credits"]).not_to be_empty
+        end
       end
     end
   end
