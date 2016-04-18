@@ -31,22 +31,24 @@ Or install it yourself as:
 ```ruby
 require "busibe"
 
-# set configuration params if any
+# set configuration params
 config = {
   public_key: "PUBLIC_KEY",
   access_token: "ACCESS_TOKEN"
 }
 
+# instantiate Client class
 client = Busibe::Client.new(config)
 ```
 
 #### Send SMS
 
 ```ruby
+# data needed to send sms
 payload = {
   to: "PHONE NUMBER",
   from: "Sender's name",
-  message: "Hello. Good morning."
+  message: "Do you love Ruby?"
 }
 
 begin
