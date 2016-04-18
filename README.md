@@ -36,6 +36,7 @@ config = {
   public_key: "PUBLIC_KEY",
   access_token: "ACCESS_TOKEN"
 }
+
 client = Busibe::Client.new(config)
 ```
 
@@ -47,6 +48,7 @@ payload = {
   from: "Sender's name",
   message: "Hello. Good morning."
 }
+
 begin
   client.send_sms payload # return instance of Client
   # OR
@@ -90,6 +92,7 @@ ___
 
 ```ruby
 message_id = "MESSAGE ID"
+
 begin
   # return instance of Client
   client.check_delivery_status message_id 
