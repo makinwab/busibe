@@ -81,7 +81,7 @@ describe Busibe::Client, vcr: true do
         payload = {
           to: ENV["PHONE_NO"],
           from: "Testing",
-          message: "Muahahahaha. What's bubbling niggas?" # urlencode
+          message: "How are you today?"
         }
 
         VCR.use_cassette("send_sms", record: :new_episodes) do
