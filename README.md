@@ -1,6 +1,4 @@
 # Busibe
-____
-
 
 [![Coverage Status](https://coveralls.io/repos/github/andela-bmakinwa/busibe/badge.svg?branch=master)](https://coveralls.io/github/andela-bmakinwa/busibe?branch=master) [![Build Status](https://travis-ci.org/andela-bmakinwa/busibe.svg?branch=master)](https://travis-ci.org/andela-bmakinwa/busibe) [![Code Climate](https://codeclimate.com/github/andela-bmakinwa/busibe/badges/gpa.svg)](https://codeclimate.com/github/andela-bmakinwa/busibe)
 
