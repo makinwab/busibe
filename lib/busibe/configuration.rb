@@ -1,11 +1,11 @@
 module Busibe
   module Configuration
-    VALID_CONNECTION_KEYS   = [:endpoint, :user_agent, :method].freeze
+    VALID_CONNECTION_KEYS   = [:endpoint, :user_agent, :request_method].freeze
     VALID_OPTIONS_KEYS      = [:public_key, :access_token, :format].freeze
     VALID_CONFIG_KEYS       = VALID_CONNECTION_KEYS + VALID_OPTIONS_KEYS
 
     DEFAULT_ENDPOINT        = "https://jusibe.com".freeze
-    DEFAULT_METHOD          = :get
+    DEFAULT_REQUEST_METHOD = :get
     DEFAULT_USER_AGENT      = "Busibe API Ruby Gem #{Busibe::VERSION}".freeze
 
     DEFAULT_PUBLIC_KEY      = nil
@@ -20,8 +20,8 @@ module Busibe
 
     # reset config settings
     def reset
-      self.endpoint       = DEFAULT_ENDPOINT
-      self.method         = DEFAULT_METHOD
+      self.endpoint = DEFAULT_ENDPOINT
+      self.request_method = DEFAULT_REQUEST_METHOD
       self.user_agent     = DEFAULT_USER_AGENT
 
       self.public_key     = DEFAULT_PUBLIC_KEY

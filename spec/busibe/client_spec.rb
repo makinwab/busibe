@@ -1,5 +1,6 @@
 require "spec_helper"
 require "dotenv"
+require "pry"
 
 describe Busibe::Client, vcr: true do
   before do
@@ -34,7 +35,7 @@ describe Busibe::Client, vcr: true do
           format: "of",
           endpoint: "ep",
           user_agent: "ua",
-          method: "hm"
+          request_method: "hm"
         }
       end
 
@@ -189,6 +190,31 @@ describe Busibe::Client, vcr: true do
           expect(result).to be_kind_of Hash
           expect(result["sms_credits"]).not_to be_empty
         end
+      end
+    end
+  end
+
+  describe ".respond_to" do
+    subject do
+      @config = {
+        public_key: ENV["PUBLIC_KEY"],
+        access_token: ENV["ACCESS_TOKEN"]
+      }
+
+      Busibe::Client.new(@config)
+    end
+
+    context "when the method does not exist" do
+      it "raises an error" do
+        expect { subject.method :invalid_with_response }.to raise_error(
+          NameError
+        )
+      end
+    end
+
+    context "when the method exists" do
+      it "does not raise an error" do
+        expect { subject.method :send_sms_with_response }.to_not raise_error
       end
     end
   end

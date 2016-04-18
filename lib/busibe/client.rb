@@ -48,19 +48,15 @@ module Busibe
     private
 
     def method_missing(method_sym, *_args, &_block)
-      if method_sym.to_s =~ /^(.*)_with_response$/
-        send($1).get_response
-      else
-        raise NoMethodError.new("Method #{method_sym} does not exist")
-      end
+      result = method_sym.to_s =~ /^(.*)_with_response$/
+      super unless result
+      send($1).get_response
     end
 
-    def respond_to?(method_sym, _include_private = false)
-      if method_sym.to_s =~ /^(.*)_with_response$/
-        true
-      else
-        super
-      end
+    def respond_to_missing?(method_sym, include_private = false)
+      method_sym.to_s =~ /^(.*)_with_response$/
+      super unless respond_to? $1.to_sym
+      true
     end
   end # Client
 end

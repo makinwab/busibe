@@ -8,9 +8,6 @@ require "vcr"
 VCR.configure do |c|
   c.cassette_library_dir = "spec/fixtures/.cassettes"
   c.hook_into :faraday
-  c.default_cassette_options = {
-    re_record_interval: 300 * 30
-  }
   c.filter_sensitive_data("message_id") do
     ENV["MESSAGE_ID"]
   end
