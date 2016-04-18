@@ -1,6 +1,5 @@
 require "spec_helper"
 require "dotenv"
-require "pry"
 
 describe Busibe::Client, vcr: true do
   before do
@@ -82,7 +81,7 @@ describe Busibe::Client, vcr: true do
         payload = {
           to: ENV["PHONE_NO"],
           from: "Testing",
-          message: "Muahahahaha. What's bubbling niggas?" # bug with url_encode
+          message: "Muahahahaha. What's bubbling niggas?" # urlencode
         }
 
         VCR.use_cassette("send_sms", record: :new_episodes) do

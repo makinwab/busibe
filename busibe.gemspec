@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["andela-bmakinwa"]
   spec.email         = ["makinwa37@gmail.com"]
 
-  spec.summary       = "TODO: Write a short summary, because Rubygems requires one."
-  spec.description   = "TODO: Write a longer description or delete this line."
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = "SMS service using Jusibe (jusibe.com)"
+  spec.description   = "Busibe provides an easy interface to interact with the Jusibe API (jusibe.com)"
+  spec.homepage      = "https://github.com/andela-bmakinwa/busibe"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
@@ -36,5 +36,4 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "dotenv"
   spec.add_development_dependency "vcr"
   spec.add_development_dependency "coveralls"
-  spec.add_development_dependency "pry"
 end
