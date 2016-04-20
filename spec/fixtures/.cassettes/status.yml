@@ -1368,4 +1368,42 @@ http_interactions:
         00:02:13","date_delivered":"2016-04-16 00:02:18","request_speed":0.0056118965148926}'
     http_version: 
   recorded_at: Wed, 20 Apr 2016 06:00:20 GMT
+- request:
+    method: post
+    uri: https://jusibe.com/smsapi/delivery_status?message_id=message_id
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.2
+      Authorization:
+      - Basic NjBmNTQxYzAxYmZmMmZmNTViZjhjZTc2NDMwMDk2ODM6NDVjM2M1ODc3ZDg4YzJhYWQ1MjYzYmFlOTI0ZGRhZGE=
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: 
+    headers:
+      cache-control:
+      - no-cache="set-cookie"
+      content-type:
+      - application/json
+      date:
+      - Wed, 20 Apr 2016 06:05:50 GMT
+      server:
+      - nginx
+      set-cookie:
+      - AWSELB=CF47C7270E7E0FA602E751EFF42FB148D6C61D79FEC19CA2FD6B35C5F31CC3673DB183FC5683E52775EDE06319E4C99A4319262B2F067EF553842B596ABE715D7F971C2BAE;PATH=/;MAX-AGE=900
+      content-length:
+      - '134'
+      connection:
+      - Close
+    body:
+      encoding: ASCII-8BIT
+      string: '{"message_id":"message_id","status":"Delivered","date_sent":"2016-04-16
+        00:02:13","date_delivered":"2016-04-16 00:02:18","request_speed":0.0057070255279541}'
+    http_version: 
+  recorded_at: Wed, 20 Apr 2016 06:05:05 GMT
 recorded_with: VCR 3.0.1
