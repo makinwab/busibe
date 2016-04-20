@@ -47,10 +47,10 @@ module Busibe
 
     private
 
-    def method_missing(method_sym, *_args, &_block)
+    def method_missing(method_sym, *args, &_block)
       result = method_sym.to_s =~ /^(.*)_with_response$/
       super unless result
-      send($1).get_response
+      send($1, *args).get_response
     end
 
     def respond_to_missing?(method_sym, include_private = false)
