@@ -4,7 +4,7 @@
 
 > Jusibe Library for Ruby
 
-Busibe is a ruby gem that consumes the services of [Jusibe](http:://jusibe.com). With this library, you can access the SMS functionalities provided by the Jusibe seamlessly.
+Busibe is a ruby gem that consumes the services of [Jusibe](http:://jusibe.com). With this library, you can access the SMS functionalities provided by Jusibe seamlessly.
 
 ## Installation
 
@@ -95,10 +95,10 @@ message_id = "MESSAGE ID"
 
 begin
   # return instance of Client
-  client.check_delivery_status message_id 
+  client.check_delivery_status message_id
   # OR
   # return response body
-  client.check_delivery_status(message_id).get_response 
+  client.check_delivery_status(message_id).get_response
 rescue Exception => e
   puts e.message
 end
@@ -140,4 +140,3 @@ To contribute to this work:
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
